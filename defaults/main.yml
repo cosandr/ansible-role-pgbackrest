@@ -13,6 +13,11 @@ pgbackrest_timer_random_delay: 0
 pgbackrest_spool_path: "/var/spool/pgbackrest"
 pgbackrest_async_archive: false
 pgbackrest_async_archive_process_max: 2
+pgbackrest_tls_enabled: true
+pgbackrest_tls_port: 8432
+pgbackrest_tls_allow_sources: []
+pgbackrest_tls_client_cn: pgbackrest-client
+pgbackrest_tls_cert_path: "/etc/pgbackrest/cert"
 pgbackrest_global_config:
   log-level-file: "info"
   log-level-console: "info"

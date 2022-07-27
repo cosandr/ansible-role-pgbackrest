@@ -10,6 +10,14 @@ repo{{ i }}-{{ k }}={{ v }}
 {{ k }}={{ v }}
 {% endfor %}
 spool-path={{ pgbackrest_spool_path }}
+{% if pgbackrest_tls_enabled | bool %}
+tls-server-address=*
+tls-server-port={{ pgbackrest_tls_port }}
+tls-server-auth={{ pgbackrest_tls_client_cn }}=*
+tls-server-ca-file={{ pgbackrest_tls_cert_path }}/ca.crt
+tls-server-cert-file={{ pgbackrest_tls_cert_path }}/server.crt
+tls-server-key-file={{ pgbackrest_tls_cert_path }}/server.key
+{% endif %}
 {% if pgbackrest_async_archive | bool %}
 archive-async=y
 

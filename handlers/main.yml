@@ -43,6 +43,12 @@
     - pgbackrest_stanzas | json_query('[*].extra."recovery-option"')
     - pgbackrest_restore_standby | bool
 
+- name: restart pgbackrest server
+  systemd:
+    name: pgbackrest.service
+    state: restarted
+  when: pgbackrest_tls_enabled | bool
+
 - name: reload systemd
   systemd:
     daemon_reload: true

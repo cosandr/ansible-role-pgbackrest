@@ -4,6 +4,13 @@ dependencies:
   - name: pg_repo
     src: https://github.com/cosandr/ansible-role-pg_repo.git
 
+  - name: firewall_config
+    vars:
+      firewall_rules:
+        - port: "{{ pgbackrest_tls_port }}"
+          sources: "{{ pgbackrest_tls_allow_sources }}"
+    when: pgbackrest_tls_enabled | bool
+
 galaxy_info:
   role_name: pgbackrest
   namespace: xait

@@ -17,6 +17,10 @@ galaxy_info:
   - name: EL
     versions:
       - "8"
+      - "9"
+  - name: Debian
+    versions:
+      - trixie
 
   license: license (BSD-3-Clause)
   galaxy_tags: []

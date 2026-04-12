@@ -1,10 +1,10 @@
 ---
 
-- name: create stanzas
-  listen: reconfigure pgbackrest
+- name: Create stanzas
+  listen: Reconfigure pgbackrest
   become: true
   become_user: "{{ pgbackrest_owner }}"
-  command: pgbackrest --stanza={{ item.name }} stanza-create
+  ansible.builtin.command: pgbackrest --stanza={{ item.name }} stanza-create
   loop: "{{ pgbackrest_stanzas }}"
   loop_control:
     label: "{{ item.name }}"
@@ -15,27 +15,27 @@
 
 - name: Restore standby from backup
   block:
-    - name: stop database
-      listen: reconfigure pgbackrest
-      systemd:
-        name: "postgresql-{{ postgresql_version }}"
+    - name: Stop database
+      listen: Reconfigure pgbackrest
+      ansible.builtin.systemd:
+        name: "{{ postgresql_daemon }}"
         state: stopped
 
-    - name: restore standby
-      listen: reconfigure pgbackrest
+    - name: Restore standby
+      listen: Reconfigure pgbackrest
       become: true
       become_user: "{{ pgbackrest_owner }}"
-      command: pgbackrest --stanza={{ item.name }} --repo={{ item.restore_repo | default('1') }} --delta --type=standby restore
+      ansible.builtin.command: pgbackrest --stanza={{ item.name }} --repo={{ item.restore_repo | default('1') }} --delta --type=standby restore
       loop: "{{ pgbackrest_stanzas }}"
       loop_control:
         label: "{{ item.name }}"
       when:
         - "'recovery-option' in item.get('extra', {})"
 
-    - name: start database
-      listen: reconfigure pgbackrest
-      systemd:
-        name: "postgresql-{{ postgresql_version }}"
+    - name: Start database
+      listen: Reconfigure pgbackrest
+      ansible.builtin.systemd:
+        name: "{{ postgresql_daemon }}"
         state: started
   when:
     - "'notest' not in ansible_skip_tags"
@@ -43,6 +43,6 @@
     - pgbackrest_stanzas | json_query('[*].extra."recovery-option"')
     - pgbackrest_restore_standby | bool
 
-- name: reload systemd
-  systemd:
+- name: Reload systemd
+  ansible.builtin.systemd:
     daemon_reload: true
